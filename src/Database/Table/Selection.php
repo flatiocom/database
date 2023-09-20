@@ -588,9 +588,28 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 	}
 
 
+	/**
+	 * CUSTOM
+	 */
 	protected function createRow(array $row): ActiveRow
 	{
-		return new ActiveRow($row, $this);
+		if (strpos($this->name, '.') === false) {
+			$tables = $this->context->getStructure()->getTables();
+			$key = array_search($this->name, array_column($tables, 'name'));
+			$name = $key === false ? $this->name : $tables[$key]['fullName'];
+		} else {
+			$name = $this->name;
+		}
+
+		list($schema, $table) = explode('.', $name);
+		$schema = Nette\Database\Helpers::underscore2camel($schema);
+		$table = Nette\Database\Helpers::underscore2camel($table);
+		$className = "\Common\Database\Entity\\{$schema}\\{$table}Row";
+		if (class_exists($className)) {
+			return new $className($row, $this);
+		} else {
+			return new ActiveRow($row, $this);
+		}
 	}
 
 

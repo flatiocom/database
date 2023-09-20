@@ -377,4 +377,13 @@ class Helpers
 
 		return implode(', ', $duplicates);
 	}
+
+
+	/**
+	 * CUSTOM: Convert underscore string to camel case
+	 */
+	public static function underscore2camel(string $string): string
+	{
+		return str_replace('_', '', ucwords($string, '_'));
+	}
 }
