@@ -391,6 +391,15 @@ class Helpers
 	}
 
 
+	/**
+	 * @version FLATIO_CUSTOM: Convert underscore string to camel case
+	 */
+	public static function underscore2camel(string $string): string
+	{
+		return str_replace('_', '', ucwords($string, '_'));
+	}
+
+
 	/** @return array{type: ?string, length: ?null, scale: ?null, parameters: ?string} */
 	public static function parseColumnType(string $type): array
 	{

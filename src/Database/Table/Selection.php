@@ -240,6 +240,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 
 	/**
 	 * Returns all rows as associative tree.
+	 * @return array<T>
+	 * @version FLATIO_CUSTOM
 	 * @deprecated
 	 */
 	public function fetchAssoc(string $path): array
@@ -565,10 +567,30 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 	}
 
 
-	/** @deprecated */
+	/**
+	 * @deprecated
+	 * @version FLATIO_CUSTOM
+	 * @return T
+	 */
 	protected function createRow(array $row): ActiveRow
 	{
-		return $this->explorer->createActiveRow($row, $this);
+		if (strpos($this->name, '.') === false) {
+			$tables = $this->context->getStructure()->getTables();
+			$key = array_search($this->name, array_column($tables, 'name'));
+			$name = $key === false ? $this->name : $tables[$key]['fullName'];
+		} else {
+			$name = $this->name;
+		}
+
+		list($schema, $table) = explode('.', $name);
+		$schema = Nette\Database\Helpers::underscore2camel($schema);
+		$table = Nette\Database\Helpers::underscore2camel($table);
+		$className = "\Common\Database\Entity\\{$schema}\\{$table}Row";
+		if (class_exists($className)) {
+			return new $className($row, $this);
+		} else {
+			return new ActiveRow($row, $this);
+		}
 	}
 
 
@@ -641,6 +663,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 
 	/**
 	 * Returns Selection parent for caching.
+	 * @version FLATIO_CUSTOM
+	 * @return static<T>
 	 */
 	protected function getRefTable(&$refPath): self
 	{
@@ -786,8 +810,9 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 
 	/**
 	 * Inserts row in a table. Returns ActiveRow or number of affected rows for Selection or table without primary key.
-	 * @param  iterable|Selection  $data
-	 * @return T|array|int|bool
+	 * @version FLATIO_CUSTOM
+	 * @param  iterable|Selection  $data  [$column => $value]|\Traversable|Selection for INSERT ... SELECT
+	 * @return T|array|int|bool Returns ActiveRow or number of affected rows for Selection or table without primary key
 	 */
 	public function insert(iterable $data): ActiveRow|array|int|bool
 	{
