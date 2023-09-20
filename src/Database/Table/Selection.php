@@ -17,6 +17,9 @@ use Nette\Database\Explorer;
 /**
  * Filtered table representation.
  * Selection is based on the great library NotORM http://www.notorm.com written by Jakub Vrana.
+ *
+ * @version FLATIO_CUSTOM
+ * @template T of ActiveRow
  */
 class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 {
@@ -127,6 +130,9 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 	}
 
 
+	/**
+	 * @return static<T>
+	 */
 	public function setPrimarySequence(string $sequence): static
 	{
 		$this->primarySequence = $sequence;
@@ -169,6 +175,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 
 	/**
 	 * Returns row specified by primary key.
+	 * @version FLATIO_CUSTOM
+	 * @return T|null
 	 */
 	public function get(mixed $key): ?ActiveRow
 	{
@@ -179,6 +187,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 
 	/**
 	 * Fetches single row object.
+	 * @version FLATIO_CUSTOM
+	 * @return T|null
 	 */
 	public function fetch(): ?ActiveRow
 	{
@@ -219,7 +229,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 
 	/**
 	 * Fetches all rows.
-	 * @return ActiveRow[]
+	 * @version FLATIO_CUSTOM
+	 * @return array<T>
 	 */
 	public function fetchAll(): array
 	{
@@ -229,6 +240,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 
 	/**
 	 * Fetches all rows and returns associative tree.
+	 * @version FLATIO_CUSTOM
+	 * @return array<T>
 	 */
 	public function fetchAssoc(string $path): array
 	{
@@ -242,7 +255,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 
 	/**
 	 * Adds select clause, more calls appends to the end.
-	 * @param  string  $columns  for example "column, MD5(column) AS column_md5"
+	 * @version FLATIO_CUSTOM
+	 * @return static<T>
 	 */
 	public function select(string $columns, ...$params): static
 	{
@@ -254,6 +268,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 
 	/**
 	 * Adds condition for primary key.
+	 * @version FLATIO_CUSTOM
+	 * @return static<T>
 	 */
 	public function wherePrimary(mixed $key): static
 	{
@@ -278,6 +294,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 	/**
 	 * Adds where condition, more calls appends with AND.
 	 * @param  string|array  $condition  possibly containing ?
+	 * @version FLATIO_CUSTOM
+	 * @return static<T>
 	 */
 	public function where(string|array $condition, ...$params): static
 	{
@@ -290,6 +308,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 	 * Adds ON condition when joining specified table, more calls appends with AND.
 	 * @param  string  $tableChain  table chain or table alias for which you need additional left join condition
 	 * @param  string  $condition  possibly containing ?
+	 * @version FLATIO_CUSTOM
+	 * @return static<T>
 	 */
 	public function joinWhere(string $tableChain, string $condition, ...$params): static
 	{
@@ -325,6 +345,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 	 * Adds where condition using the OR operator between parameters.
 	 * More calls appends with AND.
 	 * @param  array  $parameters ['column1' => 1, 'column2 > ?' => 2, 'full condition']
+	 * @version FLATIO_CUSTOM
+	 * @return static<T>
 	 * @throws Nette\InvalidArgumentException
 	 */
 	public function whereOr(array $parameters): static
@@ -360,6 +382,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 	/**
 	 * Adds order clause, more calls appends to the end.
 	 * @param  string  $columns  for example 'column1, column2 DESC'
+	 * @version FLATIO_CUSTOM
+	 * @return static<T>
 	 */
 	public function order(string $columns, ...$params): static
 	{
@@ -371,6 +395,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 
 	/**
 	 * Sets limit clause, more calls rewrite old values.
+	 * @version FLATIO_CUSTOM
+	 * @return static<T>
 	 */
 	public function limit(?int $limit, ?int $offset = null): static
 	{
@@ -382,6 +408,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 
 	/**
 	 * Sets offset using page number, more calls rewrite old values.
+	 * @version FLATIO_CUSTOM
+	 * @return static<T>
 	 */
 	public function page(int $page, int $itemsPerPage, &$numOfPages = null): static
 	{
@@ -399,6 +427,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 
 	/**
 	 * Sets group clause, more calls rewrite old value.
+	 * @version FLATIO_CUSTOM
+	 * @return static<T>
 	 */
 	public function group(string $columns, ...$params): static
 	{
@@ -410,6 +440,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 
 	/**
 	 * Sets having clause, more calls rewrite old value.
+	 * @version FLATIO_CUSTOM
+	 * @return static<T>
 	 */
 	public function having(string $having, ...$params): static
 	{
@@ -421,6 +453,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 
 	/**
 	 * Aliases table. Example ':book:book_tag.tag', 'tg'
+	 * @version FLATIO_CUSTOM
+	 * @return static<T>
 	 */
 	public function alias(string $tableChain, string $alias): static
 	{
@@ -542,9 +576,29 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 	}
 
 
+	/**
+	 * @version FLATIO_CUSTOM
+	 * @return T
+	 */
 	protected function createRow(array $row): ActiveRow
 	{
-		return new ActiveRow($row, $this);
+		if (strpos($this->name, '.') === false) {
+			$tables = $this->context->getStructure()->getTables();
+			$key = array_search($this->name, array_column($tables, 'name'));
+			$name = $key === false ? $this->name : $tables[$key]['fullName'];
+		} else {
+			$name = $this->name;
+		}
+
+		list($schema, $table) = explode('.', $name);
+		$schema = Nette\Database\Helpers::underscore2camel($schema);
+		$table = Nette\Database\Helpers::underscore2camel($table);
+		$className = "\Common\Database\Entity\\{$schema}\\{$table}Row";
+		if (class_exists($className)) {
+			return new $className($row, $this);
+		} else {
+			return new ActiveRow($row, $this);
+		}
 	}
 
 
@@ -615,6 +669,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 
 	/**
 	 * Returns Selection parent for caching.
+	 * @version FLATIO_CUSTOM
+	 * @return static<T>
 	 */
 	protected function getRefTable(&$refPath): self
 	{
@@ -761,6 +817,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 	/**
 	 * Inserts row in a table. Returns ActiveRow or number of affected rows for Selection or table without primary key.
 	 * @param  iterable|Selection  $data  [$column => $value]|\Traversable|Selection for INSERT ... SELECT
+	 * @version FLATIO_CUSTOM
+	 * @return T|array|int|bool Returns ActiveRow or number of affected rows for Selection or table without primary key
 	 */
 	public function insert(iterable $data): ActiveRow|array|int|bool
 	{
@@ -964,6 +1022,10 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 	}
 
 
+	/**
+	 * @version FLATIO_CUSTOM
+	 * @return T|false
+	 */
 	public function current(): ActiveRow|false
 	{
 		return ($key = current($this->keys)) !== false
@@ -1010,6 +1072,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 	/**
 	 * Returns specified row.
 	 * @param  string  $key
+	 * @version FLATIO_CUSTOM
+	 * @return T|null
 	 */
 	public function offsetGet($key): ?ActiveRow
 	{
