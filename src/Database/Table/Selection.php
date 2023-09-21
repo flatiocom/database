@@ -17,6 +17,9 @@ use Nette\Database\Explorer;
 /**
  * Filtered table representation.
  * Selection is based on the great library NotORM http://www.notorm.com written by Jakub Vrana.
+ *
+ * CUSTOM
+ * @template T
  */
 class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 {
@@ -1031,7 +1034,10 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 	}
 
 
-	/** @return ActiveRow|false */
+	/**
+	 * CUSTOM
+	 * @return ActiveRow|T|false
+	 */
 	#[\ReturnTypeWillChange]
 	public function current()
 	{
