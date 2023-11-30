@@ -198,6 +198,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 	/**
 	 * Returns row specified by primary key.
 	 * @param  mixed  $key  primary key
+	 * CUSTOM
+	 * @return ActiveRow|T|null
 	 */
 	public function get($key): ?ActiveRow
 	{
@@ -208,6 +210,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 
 	/**
 	 * Fetches single row object.
+	 * CUSTOM
+	 * @return ActiveRow|T|null
 	 */
 	public function fetch(): ?ActiveRow
 	{
@@ -251,7 +255,8 @@ class Selection implements \Iterator, IRowContainer, \ArrayAccess, \Countable
 
 	/**
 	 * Fetches all rows.
-	 * @return ActiveRow[]
+	 * CUSTOM
+	 * @return T[]|ActiveRow[]
 	 */
 	public function fetchAll(): array
 	{
