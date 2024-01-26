@@ -380,7 +380,7 @@ class Helpers
 
 
 	/**
-	 * CUSTOM: Convert underscore string to camel case
+	 * @version FLATIO_CUSTOM: Convert underscore string to camel case
 	 */
 	public static function underscore2camel(string $string): string
 	{
