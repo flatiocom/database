@@ -16,7 +16,7 @@ use function array_filter, array_intersect_key, array_keys, array_map, array_mer
 /**
  * Represents filtered table result.
  * Selection is based on the great library NotORM http://www.notorm.com written by Jakub Vrana.
- * @template T of ActiveRow
+ * @template-covariant T of ActiveRow
  * @implements \Iterator<string|int, T>
  * @implements \ArrayAccess<string|int, T>
  */
