@@ -131,7 +131,7 @@ class ActiveRow implements \IteratorAggregate, IRow
 
 	/**
 	 * Returns referencing rows collection.
-	 * @return GroupedSelection<ActiveRow>
+	 * @version FLATIO_CUSTOM: no generic on the return type — entity getters narrow it to their Row subtype (see Selection::createRow())
 	 */
 	public function related(string $key, ?string $throughColumn = null): GroupedSelection
 	{
